@@ -1,0 +1,29 @@
+name: Build Tyra PS2 Game
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Tyra uses a custom, modern container bundle with all its tools pre-installed
+    container: h4570/tyra:latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Base Makefile Tools
+        run: |
+          apk update && apk add make
+
+      - name: Build Tyra Game
+        run: |
+          make clean
+          make
+
+      - name: Upload Finished Tyra Game
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tyra-Game-Output
+          path: |
+            *.elf
+            *.iso
